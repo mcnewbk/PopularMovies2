@@ -1,15 +1,17 @@
-package com.mcnew.brandon.popularmovies;
+package com.mcnew.brandon.popularmovies.Tasks;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.format.Time;
-import android.util.Log;
 
-import com.mcnew.brandon.popularmovies.data.MovieContract;
+import com.mcnew.brandon.popularmovies.BuildConfig;
+import com.mcnew.brandon.popularmovies.MyOtto;
+import com.mcnew.brandon.popularmovies.ResultEvents.FetchReviewTaskResultEvent;
 import com.mcnew.brandon.popularmovies.data.MovieObject;
+import com.mcnew.brandon.popularmovies.ResultEvents.FetchSingleMovieTaskResultEvent;
+import com.mcnew.brandon.popularmovies.data.ReviewObject;
+import com.mcnew.brandon.popularmovies.data.TrailerObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,25 +21,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by Brandon on 1/17/2016.
  */
-public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObject>> {
+public class FetchReviewTask extends AsyncTask<String, Void, ArrayList<ReviewObject>> {
 
     private final Context mContext;
 
-    public FetchMoviesTask(Context context){
+    public FetchReviewTask(Context context){
         mContext = context;
     }
 
-    private ArrayList<MovieObject> getMovieDataFromJson(String movieJsonString)
+    private ArrayList<ReviewObject> getReviewDataFromJson(String movieJsonString)
             throws JSONException {
 
         // Now we have a String representing the complete forecast in JSON Format.
@@ -48,22 +47,17 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
 
         // Weather information.  Each day's forecast info is an element of the "list" array.
         final String OWM_LIST = "results";
+        final String OWM_TOTAL = "total_results";
 
-        final String OWM_URL = "poster_path";
-        final String OWM_TITLE = "title";
-        final String OWM_YEAR = "release_date";
-        final String OWM_LENGTH = "runtime";
-        final String OWM_RATING = "vote_average";
-        final String OWM_DESC = "overview";
-        final String OWM_MOIVE_ID = "id";
+        final String OWM_ID = "id";
+        final String OWM_AUTHOR = "author";
+        final String OWM_CONTENT= "content";
+        final String OWM_URL = "url";
 
         try {
-            JSONObject movieJson = new JSONObject(movieJsonString);
-            JSONArray movieArray = movieJson.getJSONArray(OWM_LIST);
-
-
-
-            ArrayList<MovieObject> cVVector = new ArrayList<MovieObject>(movieArray.length());
+            JSONObject reviewJSON = new JSONObject(movieJsonString);
+            JSONArray reviewArray = reviewJSON.getJSONArray(OWM_LIST);
+            ArrayList<ReviewObject> cVVector = new ArrayList<ReviewObject>(reviewArray.length());
 
             // OWM returns daily forecasts based upon the local time of the city that is being
             // asked for, which means that we need to know the GMT offset to translate this data
@@ -82,16 +76,13 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
             // now we work exclusively in UTC
             dayTime = new Time();
 
-            for(int i = 0; i < movieArray.length(); i++) {
-                JSONObject movie = movieArray.getJSONObject(i);
+            for(int i = 0; i < reviewArray.length(); i++) {
+                JSONObject trailer = reviewArray.getJSONObject(i);
 
-                String url = movie.getString(OWM_URL);
-                String title = movie.getString(OWM_TITLE);
-                String year = movie.getString(OWM_YEAR);
-                //String length = movie.getString(OWM_LENGTH);
-                String rating = movie.getString(OWM_RATING);
-                String desc = movie.getString(OWM_DESC);
-                String id = movie.getString(OWM_MOIVE_ID);
+                String id = trailer.getString(OWM_ID);
+                String author = trailer.getString(OWM_AUTHOR);
+                String content = trailer.getString(OWM_CONTENT);
+                String url = trailer.getString(OWM_URL);
 
 //                ContentValues movieValues = new ContentValues();
 //
@@ -102,11 +93,11 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
 //                movieValues.put(MovieContract.MovieEntry.COLUMN_RATING, rating);
 //                movieValues.put(MovieContract.MovieEntry.COLUMN_DESC, desc);
 //                movieValues.put(MovieContract.MovieEntry.COLUMN_ID, id);
-                MovieObject movieObj = new MovieObject(url, title, year, "121 mins", rating, desc, id);
-                cVVector.add(movieObj);
+                ReviewObject reviewObj = new ReviewObject(id, author, content, url);
+                cVVector.add(reviewObj);
             }
 
-            int inserted = 0;
+            //int inserted = 0;
             // add to database
 
             return cVVector;
@@ -118,13 +109,13 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
     }
 
     @Override
-    protected ArrayList<MovieObject> doInBackground(String... params) {
+    protected ArrayList<ReviewObject> doInBackground(String... params) {
 
         // If there's no zip code, there's nothing to look up.  Verify size of params.
         if (params.length == 0) {
             return null;
         }
-        String movieQuery = params[0];
+        String movieId = params[0];
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -139,12 +130,10 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
             final String MOVIE_BASE_URL =
-                    "http://api.themoviedb.org/3/discover/movie?";
-            final String QUERY_PARAM = "sort_by";
+                    "https://api.themoviedb.org/3/movie/" + params[0] + "/reviews";
             final String APPID_PARAM = "api_key";
 
             Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, params[0])
                     .appendQueryParameter(APPID_PARAM, BuildConfig.MOVIE_API_KEY)
                     .build();
 
@@ -177,7 +166,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
                 return null;
             }
             movieJsonString = buffer.toString();
-            return getMovieDataFromJson(movieJsonString);
+            return getReviewDataFromJson(movieJsonString);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -198,7 +187,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<MovieObje
     }
 
     @Override
-    protected void onPostExecute(ArrayList<MovieObject> movies) {
-        MyOtto.getInstance().post(new FetchMoviesTaskResultEvent(movies));
+    protected void onPostExecute(ArrayList<ReviewObject> movies) {
+        MyOtto.getInstance().post(new FetchReviewTaskResultEvent(movies));
     }
 }

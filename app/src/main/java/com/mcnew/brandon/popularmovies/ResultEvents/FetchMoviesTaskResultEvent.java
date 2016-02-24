@@ -1,4 +1,4 @@
-package com.mcnew.brandon.popularmovies;
+package com.mcnew.brandon.popularmovies.ResultEvents;
 
 import com.mcnew.brandon.popularmovies.data.MovieObject;
 

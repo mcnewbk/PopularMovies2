@@ -1,8 +1,6 @@
 package com.mcnew.brandon.popularmovies;
 
-import android.app.Activity;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -12,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -20,16 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
+import com.mcnew.brandon.popularmovies.Tasks.FetchMoviesTask;
 import com.mcnew.brandon.popularmovies.data.MovieContract;
 import com.mcnew.brandon.popularmovies.data.MovieObject;
+import com.mcnew.brandon.popularmovies.ResultEvents.FetchMoviesTaskResultEvent;
 import com.squareup.otto.Subscribe;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private MovieAdapter mMovieAdapter;
