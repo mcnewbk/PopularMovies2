@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -122,6 +124,8 @@ public class DetailActivity extends AppCompatActivity {
             mTrailerAdapter = new TrailerAdapter(this, this, trailers); //this will need to get movies
             //mTrailerAdapter.setTrailersArray(trailers);
             trailersListView.setAdapter(mTrailerAdapter);
+            setListViewHeightBasedOnChildren(trailersListView);
+            trailersListView.setScrollContainer(false);
         }
     }
 
@@ -136,6 +140,7 @@ public class DetailActivity extends AppCompatActivity {
             mReviewAdapter = new ReviewAdapter(this, this, reviews); //this will need to get movies
             //mReviewAdapter.setReviewsArray(reviews);
             reviewListView.setAdapter(mReviewAdapter);
+            setListViewHeightBasedOnChildren(reviewListView);
         }
     }
 
@@ -159,5 +164,23 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
     }
 }
