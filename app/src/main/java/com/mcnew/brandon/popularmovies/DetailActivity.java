@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -40,12 +41,16 @@ public class DetailActivity extends AppCompatActivity {
     private MovieObject movie;
     private ArrayList<TrailerObject> trailers;
     private ArrayList<ReviewObject> reviews;
+    private ImageButton favorite;
+    private ImageButton notFavorite;
 
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
 
     private ListView trailersListView;
     private ListView reviewListView;
+
+    private boolean isFavorited;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,8 @@ public class DetailActivity extends AppCompatActivity {
         year = (TextView) findViewById(R.id.year);
         rating = (TextView) findViewById(R.id.rating);
         desc = (TextView) findViewById(R.id.desc);
+        favorite = (ImageButton) findViewById(R.id.isFavorite);
+        notFavorite = (ImageButton) findViewById(R.id.isNotFavorite);
 
         Intent intent = this.getIntent();
         String id = "";
@@ -99,6 +106,40 @@ public class DetailActivity extends AppCompatActivity {
         year.setText(movie.getYear().substring(0, 4));
         rating.setText(movie.getRating() + "/10");
         desc.setText(movie.getDescription());
+
+        isFavorited = Utils.GetPreferenceBoolean(this, movie.getMovieID());
+        //find if it is favorite and set icon accordingly
+        resetFavorite();
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonClick(v);
+            }
+        });
+        notFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buttonClick(v);
+            }
+        });
+    }
+
+    public void resetFavorite(){
+        if(isFavorited){
+            favorite.setVisibility(View.VISIBLE);
+            notFavorite.setVisibility(View.GONE);
+        } else{
+            notFavorite.setVisibility(View.VISIBLE);
+            favorite.setVisibility(View.GONE);
+        }
+    }
+
+    public void buttonClick(View v){
+        //write code to save the favorites
+        Utils.StorePreference(this, movie.getMovieID(), !isFavorited);
+        isFavorited = !isFavorited;
+
+        resetFavorite();
     }
 
     @Subscribe

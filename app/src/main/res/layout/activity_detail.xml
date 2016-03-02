@@ -25,11 +25,10 @@
                 android:layout_marginLeft="16dp"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@android:color/white"
-                android:text="Chappie"
                 android:id="@+id/title" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <ImageView
@@ -56,6 +55,24 @@
                     android:textColor="@android:color/black"
                     android:id="@+id/rating" />
             </LinearLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/star_big_off"
+                android:id="@+id/isNotFavorite"
+                android:visibility="gone"
+                android:backgroundTint="@android:color/transparent"/>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/star_big_on"
+                android:id="@+id/isFavorite"
+                android:visibility="gone"
+                android:backgroundTint="@android:color/transparent"/>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
