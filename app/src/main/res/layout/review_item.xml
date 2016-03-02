@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:id="@+id/author"
+        android:textStyle="bold"
+        android:text="WongKentir wrote:"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:id="@+id/review_desc"
+        android:padding="12dp"
+        android:text="I actually enjoyed the movie so much that i'll recommend it to all my
+friends, at first i didn't really want to watch it because i'm not into super hero movies at all, but i did anyway, i mean people were talking so much about it i
+had to see it myself and what an awesome choice i made. The good thing about this movie is that Deadpool is a hero but in a very comedic way, you don't usually
+expect comedy from a superhero film but this
+one was full of comedy and the way they treated the plot was amazing, it was there, humor was there in every scene, even when there was fighting or romance
+or any other scene, the writers managed to add comedy everywhere in a very good way that'll surprisingly make you want to watch it again, and again. Thank you for
+taking the time read my review and if you're asking yourself if you should watch this movie, it's a definite Yes."/>
+
+</LinearLayout>

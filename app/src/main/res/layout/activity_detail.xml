@@ -72,13 +72,25 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceLarge"
             android:text="Trailers:"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="12dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="No trailers available"
+            android:id="@+id/noTrailers"
+            android:visibility="gone"
+            android:layout_marginLeft="12dp"
+            android:padding="12dp"/>
         <ListView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/trailers"
+            android:layout_marginLeft="12dp"
+            android:padding="12dp"
             android:stretchMode="columnWidth">
         </ListView>
         <View
@@ -89,15 +101,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:textAppearance="?android:textAppearanceLarge"
             android:text="Reviews:"
             android:layout_marginTop="12dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:text="No reviews available"
+            android:id="@+id/noReviews"
+            android:visibility="gone"
+            android:padding="12dp"/>
         <ListView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
             android:id="@+id/reviews"
+            android:padding="12dp"
             android:stretchMode="columnWidth">
         </ListView>
     </LinearLayout>
