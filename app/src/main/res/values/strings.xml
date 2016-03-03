@@ -10,10 +10,12 @@
 
     <string name="pref_sort_label_popular">Most Popular</string>
     <string name="pref_sort_label_rated">Highest Rated</string>
+    <string name="pref_sort_label_favorite">Favorited</string>
 
     <string name="pref_sort_popular">popularity.desc</string>
     <string name="pref_sort_default">popularity.desc</string>
     <string name="pref_sort_rated">vote_average.desc</string>
+    <string name="pref_sort_favorite">favorited</string>
     <string name="pref_sort_key">sort</string>
     <string name="title_activity_detail">Movie Details</string>
     <string name="network_issues">No network connectivity</string>

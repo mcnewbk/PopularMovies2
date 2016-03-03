@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.mcnew.brandon.popularmovies.Tasks.FetchFavoriteMoviesTask;
 import com.mcnew.brandon.popularmovies.Tasks.FetchMoviesTask;
 import com.mcnew.brandon.popularmovies.data.MovieContract;
 import com.mcnew.brandon.popularmovies.data.MovieObject;
@@ -150,7 +151,12 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
         String queryBy = prefs.getString(getActivity().getString(R.string.pref_sort_key),
                 getActivity().getString(R.string.pref_sort_default));
         try {
-            moviesTask.execute(queryBy);
+            if(queryBy.equals(getActivity().getString(R.string.pref_sort_favorite))){
+                FetchFavoriteMoviesTask favoriteMoviesTask = new FetchFavoriteMoviesTask(getActivity());
+                favoriteMoviesTask.execute(Utils.GetAllFavorites(getActivity()));
+            } else{
+                moviesTask.execute(queryBy);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
