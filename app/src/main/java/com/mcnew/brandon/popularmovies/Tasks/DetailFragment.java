@@ -73,9 +73,11 @@ public class DetailFragment extends Fragment {
         if (arguments != null) {
             id = arguments.getString(MOVIE_ID);
         }
+        if(id == null){
+            return null;
+        }
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         context = rootView.getContext();
-        MyOtto.getInstance().register(this);
 
         trailersListView = (ListView)rootView.findViewById(R.id.trailers);
         reviewListView = (ListView)rootView.findViewById(R.id.reviews);
@@ -115,6 +117,12 @@ public class DetailFragment extends Fragment {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onResume(){
+        MyOtto.getInstance().register(this);
+        super.onResume();
     }
 
     @Override

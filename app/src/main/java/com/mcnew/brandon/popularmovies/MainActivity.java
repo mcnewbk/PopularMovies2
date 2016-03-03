@@ -22,9 +22,14 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.Cal
 
         if(findViewById(R.id.movie_detail_container) != null){
             mTwoPane = true;
+            Bundle args = new Bundle();
+            //args.putString(DetailFragment.MOVIE_ID, id);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_detail_container, new DetailFragment(), "DATAG")
+                    .replace(R.id.movie_detail_container, fragment, "DATAG")
                     .commit();
         } else{
             mTwoPane = false;
