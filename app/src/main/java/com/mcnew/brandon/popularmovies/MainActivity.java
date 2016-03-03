@@ -8,14 +8,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import com.mcnew.brandon.popularmovies.Tasks.DetailFragment;
 import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity implements MovieFragment.Callback {
+
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(findViewById(R.id.movie_detail_container) != null){
+            mTwoPane = true;
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, new DetailFragment(), "DATAG")
+                    .commit();
+        } else{
+            mTwoPane = false;
+        }
     }
 
     @Override
@@ -41,8 +54,26 @@ public class MainActivity extends AppCompatActivity implements MovieFragment.Cal
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemSelected(Uri movieUri) {
 
+    @Override
+    public void onItemSelected(String id) {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle args = new Bundle();
+            args.putString(DetailFragment.MOVIE_ID, id);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment, "DATAG")
+                    .commit();
+        } else {
+            Intent detail = new Intent(this, DetailActivity.class)
+                    .putExtra(Intent.EXTRA_TEXT, id);
+            startActivity(detail);
+        }
     }
 }

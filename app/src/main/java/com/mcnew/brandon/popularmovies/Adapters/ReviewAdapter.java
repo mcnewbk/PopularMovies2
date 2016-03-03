@@ -37,7 +37,7 @@ public class ReviewAdapter extends ArrayAdapter<ReviewObject> {
         }
     }
 
-    public ReviewAdapter(Activity activity, Context context, ArrayList<ReviewObject> reviews) {
+    public ReviewAdapter(Context context, ArrayList<ReviewObject> reviews) {
         super(context, 0, reviews);
         this.reviewsArray = reviews;
         mContext = context;

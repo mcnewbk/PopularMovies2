@@ -29,6 +29,10 @@ import java.util.ArrayList;
 public class MovieFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private MovieAdapter mMovieAdapter;
 
+    public interface Callback {
+        public void onItemSelected(String id);
+    }
+
     private GridView mGridView;
     private ArrayList<MovieObject> movies;
     private View root;
@@ -55,9 +59,6 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
     static final int COL_MOVIE_DESC = 6;
     static final int COL_MOVIE_MOVIEID = 7;
 
-    public interface Callback{
-        void onItemSelected(Uri movieUri);
-    }
 
     public MovieFragment(){}
 
@@ -137,9 +138,7 @@ public class MovieFragment extends Fragment implements LoaderManager.LoaderCallb
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     MovieObject movieObject = (MovieObject) parent.getItemAtPosition(position);
-                    Intent detail = new Intent(view.getContext(), DetailActivity.class)
-                            .putExtra(Intent.EXTRA_TEXT, movieObject.getMovieID());
-                    startActivity(detail);
+                    ((Callback) getActivity()).onItemSelected(movieObject.getMovieID());
                 }
             });
         }

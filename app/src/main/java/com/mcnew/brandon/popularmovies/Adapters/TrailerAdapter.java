@@ -39,7 +39,7 @@ public class TrailerAdapter extends ArrayAdapter<TrailerObject> {
         }
     }
 
-    public TrailerAdapter(Activity activity, Context context, ArrayList<TrailerObject> trailers) {
+    public TrailerAdapter(Context context, ArrayList<TrailerObject> trailers) {
         super(context, 0, trailers);
         this.trailersArray = trailers;
         mContext = context;
